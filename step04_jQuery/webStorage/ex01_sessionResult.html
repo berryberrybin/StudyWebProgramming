@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            function getInfo() {
+                //세션 storage에 있는 정보 가져와서 div에 출력하기
+                let len = sessionStorage.length;
+                let str = "저장된 개수 : " + len + "<br>";
+
+                for (let i = 0; i < len; i++) {
+                    let key = sessionStorage.key(i);
+                    let value = sessionStorage.getItem(key);
+
+                    str += key + " : " + value + "<br>";
+                }
+
+                $("#result").html(str);
+            }
+            getInfo();
+        });
+
+    </script>
+</head>
+
+<body>
+    <h2>sessionStorage 확인하자.</h2>
+    <div id="result"></div>
+</body>
+
+</html>
