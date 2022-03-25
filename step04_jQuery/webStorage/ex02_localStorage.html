@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  <style>
+    div {
+      width: 300px;
+      height: 100px;
+      border: 1px red solid;
+    }
+  </style>
+  <script src="../js/jquery-3.6.0.min.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      $("#btnSave").click(function () {
+        let key = $("#s_key").val();
+        let value = $("#s_value").val();
+
+        //저장
+        localStorage.setItem(key, value);
+
+        //text박스 비우기 
+        $("#s_key").val("");
+        $("#s_value").val("");
+        //커서놓기
+        $("s_key").focus();
+
+        getInfo();
+      });
+      function getInfo() {
+        //localStorage에 있는 정보 가져와서 div에 출력하기
+        let len = localStorage.length;
+        let str = "저장된 개수 : " + len + "<br>";
+
+        for (let i = 0; i < len; i++) {
+          let key = localStorage.key(i);
+          let value = localStorage.getItem(key);
+
+          str += key + " : " + value + "<br>";
+        }
+
+        $("#result").html(str);
+      }
+      getInfo();
+    });
+
+
+  </script>
+
+</head>
+
+<body>
+  <h1> localStorage Test </h1>
+  <form>
+    key : <input type="text" name="s_key" id="s_key" />
+    value : <input type="text" name="s_value" id="s_value" />
+
+    <input type="button" value="저장하기" id="btnSave" />
+    <button type="button" id="btnClear">정보 지우기 </button>
+    <hr>
+    <div id="result"></div>
+  </form>
+  <p>
+    <a href="ex02_localResult.html">localStorage 확인하러 가기</a>
+
+</body>
+
+</html>
