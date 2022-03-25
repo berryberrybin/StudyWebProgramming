@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="css/basic.css" />
+	<style type="text/css">
+		.poster {
+			width: 150px;
+			height: 150px;
+
+		}
+
+		a {
+			text-decoration: none
+		}
+	</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+	<script type="text/javascript">
+		// key와 value를 가져와야 함 (key: 1001 / value : 쿵푸팬더,img/movie_img~,3000)
+		// vlaue는 콤마를 기준으로 정보를 다시 분리해야 함 - split 함수 이용 (이름, 사진, 가격 분리)
+
+
+		//<tbody>태크 content 부분에 <tr>이 추가되면서 추가한영화 들어가면 되고,
+		// price 부분 -> 주황색 부분에 총 가격이 들어가면 됨
+
+		//삭제버튼을 클릭하면, localStorage에서 정보를 삭제하고 화면을 다시 갱신
+
+		$(function () {
+			function refreshPage(){
+			//localStorage에 저장된 모든 정보를 가져와서 화면 구성하기
+			let str="";
+			let totalPrice=0;
+			   for(i=0; i<localStorage.length;i++){
+				let key = localStorage.key(i);
+				let value = localStorage.getItem(key);
+
+				let arr=value.split(",");
+
+				str+=`<tr>`;
+				str+=`<td><img src='${arr[1]}' class='poster'></td>`;
+				str+=`<td>${key}</td>`;
+				str+=`<td>${arr[0]}</td>`;
+				str+=`<td>${arr[2]}</td>`;
+				str+=`<td><button id='${key}' name='deleteItem'>삭제</button></td>`;
+				// 삭제 버튼에 id에 ${key}를 미리 심어둬서 삭제하기 편하게 함
+				str+=`</tr>`;
+
+				//가격을 누적
+				totalPrice+=parseInt(arr[2]);
+			   }
+			$("#content").html(str);
+			$("#price").html("주문가격 : "+ totalPrice+"원");
+			}
+			//삭제를 클릭했을 때
+
+			// 정적 Element일 때는 이 방법으로 이벤트(클릭)시 반응이 옴
+			// $("[name=deleteItem]").click(function (){ alert(1);}); => But, 동적Element일때는 사용불가
+
+			// .on 을 사용시 동적+정적 Element 모두 이벤트 적용가능
+			$(document).on("click","[name=deleteItem]",function (){
+				if(confirm("정말 삭제하시겠습니까?")){
+					// 미리 삭제하기 버튼에 id를 ${key}로 설정해서 this로 가져오기 편함
+					localStorage.removeItem($(this).attr("id"));
+
+					//미리 id=${key}를 설정하지 않았을때 접근 방법
+					//console.log($(this).parent().parent().find("td:first").next().text()); //jQurey에서는 nextSibling이 next()로 되어있음
+					//let key = $(this).parent().parent().find("td:first").next().text();
+					//localStorage.removeItem(key);
+					refreshPage(); //화면 재갱신
+				}
+			})
+			refreshPage();//화면 재갱신
+		})
+	</script>
+</head>
+
+<body>
+	<article class="main">
+		<section>
+			<table width="80%" align="center">
+				<caption class="caption">찜 리스트</caption>
+				<thead>
+					<tr>
+						<th>이미지</th>
+						<th>상품번호</th>
+						<th>상품이름</th>
+						<th>가격</th>
+						<th>삭제</th>
+					</tr>
+				</thead>
+				<tbody id="content">
+				</tbody>
+
+			</table>
+		</section>
+		<section class="toalprice" id="price">
+
+		</section>
+		<section class="link">
+			<table align="center">
+				<tr>
+					<td align="center">
+						<a href="">주문하러 가기</a>
+						<a href="index.html">DVD LIST</a>
+					</td>
+				</tr>
+			</table>
+		</section>
+	</article>
+</body>
+
+</html>
